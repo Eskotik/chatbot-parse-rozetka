@@ -4,7 +4,10 @@ const token = process.env.Api_Token
 const bot = new TelegramApi(token, {polling:true})
 const sequelize = require('./database/db')
 
-
+bot.setMyCommands([
+    {command: '/start', description: 'Початкове привітання'},
+    {command: '/action', description: 'Виконання дій'}
+])
 
 const start = async ()  => {
     try {
@@ -21,5 +24,7 @@ const start = async ()  => {
             return bot.sendMessage(chatId, "Ласкаво просимо в телеграм бот для відстеження ціни товару на площадці Rozetka")
         }
     })
+    
 }
+
 start()
