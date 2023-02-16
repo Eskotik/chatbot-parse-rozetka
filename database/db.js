@@ -1,12 +1,14 @@
 const dotenv = require('dotenv').config();
 const {Sequelize} = require ('sequelize')
+port = process.env.port
+password = process.env.pass
 module.exports = new Sequelize(
     'ChatbotRozetka',
     'postgres',
-    process.env.pass,
+    password,
     {
         host: 'localhost',
-        port: '5432',
+        port: port,
         dialect: 'postgres'
     }
 )
