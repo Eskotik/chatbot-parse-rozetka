@@ -12,6 +12,9 @@ async function parse(chatId, url) {
     const dom = await JSDOM.fromURL(url);
     const d = dom.window.document;
     let goods = d.querySelector("rz-product.ng-star-inserted");
+    let goodsId = goods.querySelector(
+      "p.product__code.detail-code"
+    ).textContent;
     let goodsName = goods.querySelector("h1.product__title").textContent;
     let goodsPrice = goods
       .querySelector("p.product-prices__big")
@@ -24,14 +27,14 @@ async function parse(chatId, url) {
 
     bot.sendMessage(
       chatId,
-      `Назва:${goodsName}\nЦіна: ${parseFloat(
-        goodsPrice
-      )}₴\nСтатус:${goodsStatus}`
+      `id товару:${goodsId.slice(5)}\n
+      Назва:${goodsName}\n
+      Ціна: ${parseFloat(goodsPrice)}₴\n
+      Статус:${goodsStatus}`
     );
   } catch (e) {
     bot.sendMessage("Error");
   }
-  // return goodsPhoto
 }
 
 const start = async () => {
