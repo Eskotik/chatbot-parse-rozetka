@@ -2,7 +2,7 @@
 const dotenv = require("dotenv").config();
 const token = process.env.Api_Token;
 const bot = new TelegramApi(token, { polling: true });
-const sequelize = require("./database/db");
+const insertData = require("./database/db");
 const { JSDOM } = require("jsdom");
 
 bot.setMyCommands([{ command: "/start", description: "Привітання" }]);
@@ -11,42 +11,59 @@ async function parse(chatId, url, userid) {
   try {
     const dom = await JSDOM.fromURL(url);
     const d = dom.window.document;
+
     let goods = d.querySelector("rz-product.ng-star-inserted");
-    let goodsId = goods.querySelector(
-      "p.product__code.detail-code"
-    ).textContent.slice(5)
-    let goodsName = goods.querySelector("h1.product__title").textContent;
-    let goodsPrice = parseFloat(goods
-      .querySelector("p.product-prices__big")
-      .textContent.split(/\s+/)
-      .join(""));
+    let goodsId = parseInt(
+      goods.querySelector("p.product__code.detail-code").textContent.slice(5)
+    );
+    let goodsName = goods.querySelector("h1.product__title").textContent.trim();
+    let goodsPrice = parseInt(
+      goods
+        .querySelector("p.product-prices__big")
+        .textContent.split(/\s+/)
+        .join("")
+    );
     let goodsPhoto = goods
       .querySelector("img.picture-container__picture")
       .getAttribute("src");
-    let goodsStatus = goods.querySelector("p.status-label").textContent;
-  data = {
-    value1: userid,
-    value2: goodsId,
-    value3: goodsName,
-    value4: goodsPrice,
-    value5: goodsPhoto,
-    value6: goodsStatus
-}
-    bot.sendMessage(
+    let goodsStatus = goods
+      .querySelector("p.status-label")
+      .textContent.trim()
+      .slice(0);
+
+    data = {
+      value1: userid,
+      value2: goodsId,
+      value3: goodsName,
+      value4: goodsPrice,
+      value5: goodsPhoto,
+      value6: goodsStatus,
+    };
+
+    await sendData(
       chatId,
-      `Id юзера:${userid}\nId товару:${goodsId}\nНазва:${goodsName}\nЦіна: ${goodsPrice}₴\nСтатус:${goodsStatus}`
+      goodsId,
+      goodsPhoto,
+      goodsName,
+      goodsPrice,
+      goodsStatus
     );
-  } catch (e) {
-    bot.sendMessage("Error");
+  } catch (error) {
+    console.error("Error parse", error);
   }
+}
+async function sendData(chatId, id, photo, name, price, status) {
+  await bot.sendPhoto(chatId, photo);
+  bot.sendMessage(
+    chatId,
+    `Id товару: ${id}\nНазва: ${name}\nЦіна: ${price}₴\nСтатус: ${status}`
+  );
 }
 
 const start = async () => {
   try {
-    await sequelize.authenticate();
-    await sequelize.sync();
-  } catch (e) {
-    console.log("Підключення до бази зникло");
+  } catch (error) {
+    console.error("Підключення до бази зникло", error);
   }
 
   bot.on("message", async (msg) => {
@@ -56,24 +73,21 @@ const start = async () => {
     if (text === "/start") {
       await bot.sendMessage(
         chatId,
-        "Ласкаво просимо в телеграм бот для відстеження ціни товару на площадці Rozetka"
-      );
-      await bot.sendMessage(
-        chatId,
-        "Надішліть URL посилання після цього повідомлення"
+        "Ласкаво просимо в телеграм бот для відстеження ціни товару на площадці Rozetka\nНадішліть URL посилання після цього повідомлення"
       );
     }
 
     try {
       const url = msg.text;
-      console.log(msg)
-      if (/^https?:\/\/.*?rozetka\.com\.ua\//.test(url)) {
+      const regex = /^https?:\/\/.*?rozetka\.com\.ua\//;
+      if (regex.test(url)) {
         await parse(chatId, url, userid);
-        bot.sendMessage(chatId, "✅Дані занесено в базу");
-
+        await bot.sendMessage(chatId, "✅Дані занесено в базу");
+        console.log(data);
+        insertData(data);
       }
-    } catch (e) {
-      bot.sendMessage(chatId, "Error");
+    } catch (error) {
+      console.error(error);
     }
   });
 };
