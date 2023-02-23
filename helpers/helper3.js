@@ -25,7 +25,7 @@ const action = async () => {
           CheckedUrl()
           await bot.sendMessage(chatId, "✅Дані занесено в базу");
         }
-        else if(url !=="/start")  bot.sendMessage(chatId, "⛔️Дані введено не вірно, спробуйте ща раз")
+        else if(url !== "/start" && url !== "/start@ChatbotRozetkaBot")  bot.sendMessage(chatId, "⛔️Дані введено не вірно, спробуйте ща раз")
       } catch (error) {
         console.error(error);
       }
