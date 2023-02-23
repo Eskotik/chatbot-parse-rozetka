@@ -31,6 +31,7 @@ async function parse(chatId, url, userid) {
       value4: goodsPrice,
       value5: goodsPhoto,
       value6: goodsStatus,
+      value7: url,
     };
 
     await sendData(

@@ -3,7 +3,7 @@ const client = require("./db")
 async function insertData(data) {
     try {
       const query =
-        "INSERT INTO rozetka_db (userid, goodsid, goodsname, goodsprice, goodsphoto, goodsstatus) VALUES ($1, $2, $3, $4, $5, $6)";
+        "INSERT INTO rozetka_db (userid, goodsid, goodsname, goodsprice, goodsphoto, goodsstatus, goodsurl) VALUES ($1, $2, $3, $4, $5, $6, $7)";
       const values = [
         data.value1,
         data.value2,
@@ -11,6 +11,7 @@ async function insertData(data) {
         data.value4,
         data.value5,
         data.value6,
+        data.value7
       ];
       if (await client.query(query, values)) {
         console.log("Data inserted successfully!");

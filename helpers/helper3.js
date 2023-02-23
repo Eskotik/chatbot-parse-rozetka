@@ -19,7 +19,7 @@ const action = async () => {
                 }
           await parse(chatId, url, userid);
           CheckUrl(data1)
-          //await insertData(data);
+          await insertData(data);
           console.log(data);
           await bot.sendMessage(chatId, "✅Дані занесено в базу");
         }
