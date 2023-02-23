@@ -6,7 +6,6 @@ async function parse(chatId, url, userid) {
   try {
     const dom = await JSDOM.fromURL(url);
     const d = dom.window.document;
-
     let goods = d.querySelector("rz-product.ng-star-inserted");
     let goodsId = parseInt(
       goods.querySelector("p.product__code.detail-code").textContent.slice(5)
