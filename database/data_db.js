@@ -21,7 +21,7 @@ async function insertData(data) {
     } 
   }
 
-async function CheckUrl(data){
+async function InsertUrl(data){
     try {
         const query = 
         "INSERT INTO rozetka (userid, goodsurl) VALUES ($1, $2)";
@@ -39,5 +39,5 @@ async function CheckUrl(data){
 
   module.exports ={
     insertData,
-    CheckUrl
+    InsertUrl
   }
