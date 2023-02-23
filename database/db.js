@@ -1,22 +1,25 @@
-﻿const dotenv = require("dotenv").config();
-
-port = process.env.port;
-password = process.env.pass;
-const { Pool, Client } = require("pg");
+﻿const path = require('path')
+const {db, password,port} = require(path.join(__dirname, '..', './config/bot.js'));
+const {Client } = require("pg");
 
 const client = new Client({
   user: "postgres",
   host: "localhost",
-  database: "ChatbotRozetka",
+  database: db,
   password: password,
   port: port,
 });
 
+connection()
+
+async function connection(){
+  await client.connect()
+}
+
 async function insertData(data) {
   try {
-    await client.connect();
     const query =
-      "INSERT INTO db_data (userid, chatid, goodsname, goodsprice, goodsphoto, goodsstatus) VALUES ($1, $2, $3, $4, $5, $6)";
+      "INSERT INTO rozetka_db (userid, goodsid, goodsname, goodsprice, goodsphoto, goodsstatus) VALUES ($1, $2, $3, $4, $5, $6)";
     const values = [
       data.value1,
       data.value2,
@@ -25,13 +28,12 @@ async function insertData(data) {
       data.value5,
       data.value6,
     ];
-    await client.query(query, values);
-    console.log("Data inserted successfully!");
+    if (await client.query(query, values)) {
+      console.log("Data inserted successfully!");
+    }
   } catch (error) {
     console.error("Error inserting data: ", error);
-  } finally {
-    await client.end();
-  }
+  } 
 }
 
 module.exports = insertData;
