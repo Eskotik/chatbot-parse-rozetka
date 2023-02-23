@@ -19,4 +19,24 @@ async function insertData(data) {
       console.error("Error inserting data: ", error);
     } 
   }
-  module.exports = insertData
+
+async function CheckUrl(data){
+    try {
+        const query = 
+        "INSERT INTO rozetka (userid, goodsurl) VALUES ($1, $2)";
+        const values = [
+            data.value1,
+            data.value2,
+          ];
+          if (await client.query(query, values)) {
+            console.log("Url inserted successfully!");
+          }
+    } catch (error) {
+        console.error("Error CheckUrl data: ", error);
+    }
+}
+
+  module.exports ={
+    insertData,
+    CheckUrl
+  }
