@@ -1,5 +1,4 @@
-﻿const path = require('path')
-const {db, password,port} = require(path.join(__dirname, '..', './config/bot.js'));
+﻿const {db, password,port} = require("../config/bot.js");
 const {Client } = require("pg");
 
 const knex = require('knex')({
@@ -27,8 +26,13 @@ connection()
 async function connection(){
   await client.connect()
 }
+async function release(){
+  await client,release()
+}
 
 module.exports = {
   client,
-  knex
+  knex,
+  connection,
+  release
 }

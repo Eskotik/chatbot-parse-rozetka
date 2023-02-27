@@ -1,6 +1,5 @@
 ﻿const { JSDOM } = require("jsdom");
-const path = require("path");
-const sendData = require(path.join(__dirname, "..", "./helpers/helper1.js"));
+const sendData = require("../utils/sendData.js");
 
 async function parse(chatId, url, userid) {
   try {

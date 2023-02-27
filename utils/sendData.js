@@ -1,5 +1,4 @@
-﻿const path = require("path");
-const { bot } = require(path.join(__dirname, "..", "./config/bot.js"));
+﻿const { bot } = require("../config/bot.js");
 
 async function sendData(chatId, id, photo, name, price, status) {
   await bot.sendPhoto(chatId, photo);

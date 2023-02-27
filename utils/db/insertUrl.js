@@ -1,6 +1,5 @@
-﻿const { knex } = require("./db");
-const path = require("path");
-const { bot } = require(path.join(__dirname, "..", "./config/bot.js"));
+﻿const { knex } = require("../../database/db.js");
+const { bot } = require("../../config/bot.js");
 
 async function InsertUrl(data, chatId) {
   try {
@@ -22,9 +21,6 @@ async function InsertUrl(data, chatId) {
         userid: data.value1,
         goodsurl: data.value2,
       });
-      
-      await bot.sendMessage(chatId, "Дані записано в бд");
-      console.log("Url inserted successfully!");
       return true
     }
   } catch (error) {

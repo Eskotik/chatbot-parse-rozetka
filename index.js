@@ -1,6 +1,6 @@
-﻿const start = require("./helpers/helper2");
+﻿const start = require("./utils/start");
 const { bot } = require("./config/bot");
-const action = require("./helpers/helper3")
+const action = require("./utils/action")
 bot.setMyCommands([{ command: "/start", description: "Привітання" }]);
 
 start();
