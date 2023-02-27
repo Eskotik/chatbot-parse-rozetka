@@ -1,4 +1,4 @@
-﻿const { bot } = require("../config/bot.js");
+﻿const { bot } = require("../../config/bot.js");
 
 const start = async () => {
   bot.onText(/\/start/, async function (msg, match) {

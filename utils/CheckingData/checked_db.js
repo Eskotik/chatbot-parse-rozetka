@@ -29,8 +29,7 @@ async function CheckedUrl(chatId) {
             .andWhereRaw("t1.goodsurl = t2.goodsurl");
         })
       })
-    .then(function (result) {
-      console.log("Inserted data:", result);
+    .then(function () {
       bot.sendMessage(chatId, "Дані записано в rozetka");
       return true;
     })

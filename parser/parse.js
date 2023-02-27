@@ -1,5 +1,5 @@
 ﻿const { JSDOM } = require("jsdom");
-const sendData = require("../utils/sendData.js");
+const sendData = require("../utils/mainFunctions/sendData");
 
 async function parse(chatId, url, userid) {
   try {
