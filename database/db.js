@@ -1,15 +1,15 @@
-﻿const {db, password,port} = require("../config/bot.js");
-const {Client } = require("pg");
+﻿const { db, password, port } = require("../config/bot.js");
+const { Client } = require("pg");
 
-const knex = require('knex')({
-  client: 'pg',
+const knex = require("knex")({
+  client: "pg",
   connection: {
-    host : 'localhost',
-    port : port,
-    user : 'postgres',
-    password : password,
-    database : db
-  }
+    host: "localhost",
+    port: port,
+    user: "postgres",
+    password: password,
+    database: db,
+  },
 });
 
 
@@ -21,18 +21,18 @@ const client = new Client({
   port: port,
 });
 
-connection()
+connection();
 
-async function connection(){
-  await client.connect()
+async function connection() {
+  await client.connect();
 }
-async function release(){
-  await client,release()
+async function release() {
+  await client.release();
 }
 
 module.exports = {
   client,
   knex,
   connection,
-  release
-}
+  release,
+};

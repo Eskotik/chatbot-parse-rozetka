@@ -1,4 +1,4 @@
-const getLatestPriceFromDB = require("../db/getLatestPriceFromDB");
+﻿const getPricefromdb = require("../db/getLatestPriceFromDB");
 const parsePrice = require("../../parser/parsePrice");
 const { knex } = require("../../database/db");
 const { bot } = require("../../config/bot.js");
@@ -6,8 +6,9 @@ const { bot } = require("../../config/bot.js");
 async function checkPriceAndNotify(chatId, url) {
   const priceFromSite = await parsePrice(url);
   var date = new Date();
-  const priceFromDB = await getLatestPriceFromDB();
-  console.log("Ok", date.toUTCString());
+  const priceFromDB = await getPricefromdb(url);
+  const goodsUrl = url;
+  console.log("Ok", chatId, date.toUTCString());
   if (priceFromSite !== priceFromDB) {
     try {
       bot.sendMessage(
@@ -15,8 +16,9 @@ async function checkPriceAndNotify(chatId, url) {
         `Ціна на товар змінилась на сайті Rozetka! Нова ціна: ${priceFromSite} грн.`
       );
       await knex("rozetka_db")
-        .where("id", knex.raw('(SELECT MAX(id) FROM "rozetka_db")'))
+        .where("goodsurl", goodsUrl)
         .update({ goodsprice: priceFromSite });
+      console.log("Price updated in the database");
     } catch (err) {
       console.error(err);
     }

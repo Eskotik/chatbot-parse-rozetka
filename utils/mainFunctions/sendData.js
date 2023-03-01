@@ -6,6 +6,7 @@ async function sendData(chatId, id, photo, name, price, status) {
     chatId,
     `Id товару: ${id}\nНазва: ${name}\nЦіна: ${price}₴\nСтатус: ${status}`
   );
+  bot.sendMessage(chatId, "✅Розпочато стеження за цим товаром");
 }
 
 module.exports = sendData;
