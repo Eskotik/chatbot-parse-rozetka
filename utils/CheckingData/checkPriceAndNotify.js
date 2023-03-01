@@ -13,7 +13,7 @@ async function checkPriceAndNotify(chatId, url) {
     try {
       bot.sendMessage(
         chatId,
-        `Ціна на товар змінилась на сайті Rozetka! Нова ціна: ${priceFromSite} грн.`
+        `Ціна на товар змінилась на сайті Rozetka! Нова ціна: ${priceFromSite} грн.\n ${goodsUrl}`
       );
       await knex("rozetka_db")
         .where("goodsurl", goodsUrl)
