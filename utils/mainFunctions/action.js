@@ -1,4 +1,5 @@
 ﻿const { bot } = require("../../config/bot.js");
+const cron = require("node-cron");
 const InsertUrl = require("../db/insertUrl.js");
 const insertData = require("../db/data_db.js");
 const CheckedUrl = require("../CheckingData/checked_db.js");
@@ -12,20 +13,19 @@ const action = async () => {
       const chatId = msg.chat.id;
       const url = msg.text;
       const userid = msg.from.id;
-      const Interval = 24 * 60 * 60 * 1000;
+      const Interval = 60 * 60 * 1000;
       if (regex.test(url)) {
         data1 = {
           value1: chatId,
           value2: url,
         };
         if ((await InsertUrl(data1, chatId)) != false) {
-          await CheckedUrl(chatId)
+          await CheckedUrl(chatId);
           await parse(chatId, url, userid);
           await insertData(data);
-          checkPriceAndNotify(chatId, url);
-          setInterval(function () {
+          cron.schedule("0 8, 20 * * *", function () {
             checkPriceAndNotify(chatId, url);
-          }, Interval);
+          });
         }
       } else if (url !== "/start" && url !== "/start@ChatbotRozetkaBot")
         bot.sendMessage(chatId, "⛔️Дані введено не вірно, спробуйте ща раз");
